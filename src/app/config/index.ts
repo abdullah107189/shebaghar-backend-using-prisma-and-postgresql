@@ -7,4 +7,6 @@ const config = {
   database: process.env.DATABASE_URL,
   jwtSecret: process.env.JWT_SECRET,
   saltRound: process.env.SALT_ROUND,
+  node_dev: process.env.NODE_ENV,
 };
+export default config;

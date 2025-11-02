@@ -4,6 +4,7 @@ import express, {
   type Response,
 } from "express";
 import cors from "cors";
+import config from "./app/config/index.js";
 const app: Application = express();
 
 //---- Middleware ----
@@ -16,6 +17,9 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Welcome to the Shebaghar API!",
+    environment: config.node_dev,
+    uptime: process.uptime().toFixed(2) + "sec",
+    timeStamp: new Date().toISOString(),
   });
 });
 

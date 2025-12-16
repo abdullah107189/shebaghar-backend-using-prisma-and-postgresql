@@ -4,7 +4,7 @@ import express, {
   type Response,
 } from "express";
 import cors from "cors";
-import config from "./app/config/index.js";
+import config from "./config/index.js";
 const app: Application = express();
 
 //---- Middleware ----

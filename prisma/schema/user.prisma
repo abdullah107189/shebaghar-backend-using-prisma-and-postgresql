@@ -1,86 +1,86 @@
--- Active: 1748101600106@@127.0.0.1@5432
 model User {
-    id       String @id @default(uuid())
+  id String @id @default(uuid())
 
-    email    String @unique
-    password String
+  email    String @unique
+  password String
 
-    role               UserRole   @default(PATIENT)
-    status             UserStatus @default(ACTIVE)
-    needPasswordChange Boolean    @default(false)
+  role               UserRole   @default(PATIENT)
+  status             UserStatus @default(ACTIVE)
+  needPasswordChange Boolean    @default(false)
 
-    isDeleted Boolean  @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    admin Admin?
-    doctor Doctor?
-    patient Patient?
-    @@map("users")
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  admin     Admin?
+  doctor    Doctor?
+  patient   Patient?
+
+  @@map("users")
 }
 
 model Admin {
-    id            String   @id @default(uuid())
-    // Relationship
-    name          String
-    email         String   @unique
-    profilePhoto  String
-    contactNumber String
-    isDeleted     Boolean  @default(false)
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
+  id            String   @id @default(uuid())
+  // Relationship
+  name          String
+  email         String   @unique
+  profilePhoto  String
+  contactNumber String
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-    user User @relation(fields:[email], references:[email])
-    @@map("admins")
+  user User @relation(fields: [email], references: [email])
+
+  @@map("admins")
 }
 
 model Doctor {
-    id String @id @default(uuid())
-    // 1:1 Relationship with User table
-  email              String     @unique 
+  id    String @id @default(uuid())
+  // 1:1 Relationship with User table
+  email String @unique
 
-    // Profile Details
-  name                String
-  profilePhoto        String?
-  contactNumber       String?
-  address             String?
-  gender              Gender
-  
+  // Profile Details
+  name          String
+  profilePhoto  String?
+  contactNumber String?
+  address       String?
+  gender        Gender
+
   // Professional Details (Healthcare specific)
   qualification       String
   designation         String
-  experience          Int 
+  experience          Int
   currentWorkingPlace String?
-  appointmentFee      Float 
-  
+  appointmentFee      Float
+
   // Audit Fields
-  isDeleted           Boolean  @default(false)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  user                User       @relation(fields: [email], references: [email])
-  
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [email], references: [email])
+
   @@map("doctors")
 }
 
 model Patient {
-    id String @id @default(uuid())
+  id String @id @default(uuid())
 
-    // Profile Details
-  name                String
-  email String
-  profilePhoto        String?
-  contactNumber       String?
-  address             String?
+  // Profile Details
+  name          String
+  email         String @unique
+  profilePhoto  String?
+  contactNumber String?
+  address       String?
 
   // Medical Details (Optional but useful)
-  dateOfBirth         DateTime? 
-  bloodGroup          String? 
+  dateOfBirth DateTime?
+  bloodGroup  String?
 
   // Audit Fields
-  isDeleted           Boolean  @default(false)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-user User @relation(fields:[email], references:[email])
-@@map("patients")
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [email], references: [email])
+
+  @@map("patients")
 }
-
-

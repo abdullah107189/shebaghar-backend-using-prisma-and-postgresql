@@ -5,6 +5,7 @@ import express, {
 } from "express";
 import cors from "cors";
 import config from "./config/index.js";
+import router from "./app/routes/index.js";
 const app: Application = express();
 
 //---- Middleware ----
@@ -22,5 +23,7 @@ app.get("/", (req: Request, res: Response) => {
     timeStamp: new Date().toISOString(),
   });
 });
+
+app.use("/api/v1", router);
 
 export default app;

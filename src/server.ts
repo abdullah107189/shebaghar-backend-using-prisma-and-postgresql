@@ -1,11 +1,12 @@
 import { Server } from "http";
 import app from "./app.js";
+import config from "./config/index.js";
 
 async function serverStart() {
   // This variable will hold our server instance
   let server: Server;
-  server = app.listen(5000, () => {
-    console.log(`Server is running on http://localhost:5000`);
+  server = app.listen(config.port, () => {
+    console.log(`Server is running on http://localhost:${config.port}`);
   });
 
   // Function to gracefully shut down the server

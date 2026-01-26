@@ -42,7 +42,6 @@ const getUserById = async (id: number) => {
       updatedAt: true,
     },
   });
-
   return result;
 };
 export const userService = {

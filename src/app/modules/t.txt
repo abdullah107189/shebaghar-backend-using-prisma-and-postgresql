@@ -1,0 +1,6 @@
+post/
+├── post.interface.ts
+├── post.validation.ts
+├── post.service.ts
+├── post.controller.ts
+└── post.route.ts

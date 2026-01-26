@@ -1,7 +1,19 @@
 import { Server } from "http";
 import app from "./app.js";
+import { prisma } from "./app/lib/prisma.js";
 
+async function connectToDB() {
+  try {
+    await prisma.$connect();
+    console.log("*** DB Connected");
+  } catch (e) {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+}
 async function serverStart() {
+  await connectToDB();
   // This variable will hold our server instance
   let server: Server;
   server = app.listen(5000, () => {

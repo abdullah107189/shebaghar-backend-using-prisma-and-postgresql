@@ -5,6 +5,7 @@ import express, {
 } from "express";
 import cors from "cors";
 import config from "./config/index.js";
+import router from "./app/routes/index.js";
 const app: Application = express();
 
 //---- Middleware ----
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/api/v1", router);
 // Root welcome route
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({

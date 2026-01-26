@@ -4,7 +4,7 @@ const globalErrorHandler = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   let statusCode = httpStatus.INTERNAL_SERVER_ERROR;
   let success = false;

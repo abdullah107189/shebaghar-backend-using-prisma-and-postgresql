@@ -6,6 +6,8 @@ import express, {
 import cors from "cors";
 import config from "./config/index.js";
 import router from "./app/routes/index.js";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler.js";
+import notFound from "./app/middlewares/notFound.js";
 const app: Application = express();
 
 //---- Middleware ----
@@ -24,5 +26,6 @@ app.get("/", (req: Request, res: Response) => {
     timeStamp: new Date().toISOString(),
   });
 });
-
+app.use(globalErrorHandler);
+app.use(notFound);
 export default app;

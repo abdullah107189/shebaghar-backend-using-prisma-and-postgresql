@@ -5,16 +5,27 @@ import sendResponse from "../../shared/sendResponse.js";
 import httpStatus from "http-status";
 const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    // const result = await userService.createUser(req.body);
+    const result = await userService.createUser(req.body);
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
-      data: req.body,
+      data: result,
       message: "User created successfully",
     });
   },
 );
 
+const getUsers = catchAsync(async (req: Request, res: Response) => {
+  const result = await userService.getUsers();
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    data: result,
+    message: "Users retrieved successfully",
+  });
+});
+
 export const UserController = {
   createUser,
+  getUsers,
 };

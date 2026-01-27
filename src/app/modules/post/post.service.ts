@@ -57,7 +57,18 @@ const getPosts = async (
   };
 };
 const getPostById = async (id: number) => {
-  const result = prisma.post.findUnique({ where: { id } });
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.post.update({
+      where: { id },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+    // throw new Error("Testing transaction rollback");
+    return await tx.post.findUnique({ where: { id } });
+  });
   return result;
 };
 const updatePost = async (

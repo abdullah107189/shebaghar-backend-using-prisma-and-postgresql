@@ -5,6 +5,7 @@ import type {
   User,
 } from "../../../../prisma/generated/prisma/client.js";
 import { prisma } from "../../lib/prisma.js";
+import { ta } from "zod/locales";
 const createPost = async (payload: Prisma.PostCreateInput): Promise<Post> => {
   return prisma.post.create({ data: payload });
 };
@@ -13,6 +14,7 @@ const getPosts = async (
   limit: number,
   search: string,
   isFetured: boolean,
+  tags: string[],
 ) => {
   const skip = (page - 1) * limit;
   const where: any = {
@@ -34,8 +36,10 @@ const getPosts = async (
         ],
       },
       typeof isFetured === "boolean" ? { isFetured } : undefined,
+      tags && tags.length > 0 && { tags: { hasEvery: tags } },
     ].filter(Boolean),
   };
+  console.log(tags);
   return prisma.post.findMany({
     skip,
     take: limit,

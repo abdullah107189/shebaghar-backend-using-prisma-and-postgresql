@@ -23,11 +23,13 @@ const getPosts = catchAsync(
     const isFetured = req.query.isFetured
       ? req.query.isFetured === "true"
       : undefined;
+    const tags = req.query.tags ? (req.query.tags as string).split(",") : [];
     const result = await postService.getPosts(
       page,
       limit,
       search as string,
       isFetured as boolean,
+      tags as string[],
     );
     sendResponse(res, {
       success: true,

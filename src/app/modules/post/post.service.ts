@@ -39,12 +39,22 @@ const getPosts = async (
       tags && tags.length > 0 && { tags: { hasEvery: tags } },
     ].filter(Boolean),
   };
-  console.log(tags);
-  return prisma.post.findMany({
+  const result = prisma.post.findMany({
     skip,
     take: limit,
     where,
+    orderBy: { createdAt: "desc" },
   });
+  const total = await prisma.post.count({ where });
+  return {
+    data: await result,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
 };
 const getPostById = async (id: number) => {
   const result = prisma.post.findUnique({ where: { id } });

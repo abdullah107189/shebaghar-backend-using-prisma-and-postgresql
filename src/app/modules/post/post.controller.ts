@@ -3,6 +3,7 @@ import catchAsync from "../../shared/catchAsync.js";
 import sendResponse from "../../shared/sendResponse.js";
 import httpStatus from "http-status";
 import { postService } from "./post.service.js";
+import { boolean } from "zod";
 const createPost = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const result = await postService.createPost(req.body);
@@ -16,7 +17,18 @@ const createPost = catchAsync(
 );
 const getPosts = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const result = await postService.getPosts();
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const search = req.query.search || "";
+    const isFetured = req.query.isFetured
+      ? req.query.isFetured === "true"
+      : undefined;
+    const result = await postService.getPosts(
+      page,
+      limit,
+      search as string,
+      isFetured as boolean,
+    );
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,

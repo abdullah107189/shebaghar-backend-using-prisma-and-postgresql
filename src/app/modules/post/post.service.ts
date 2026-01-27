@@ -1,3 +1,4 @@
+import { title } from "node:process";
 import type {
   Post,
   Prisma,
@@ -7,8 +8,39 @@ import { prisma } from "../../lib/prisma.js";
 const createPost = async (payload: Prisma.PostCreateInput): Promise<Post> => {
   return prisma.post.create({ data: payload });
 };
-const getPosts = async () => {
-  return prisma.post.findMany();
+const getPosts = async (
+  page: number,
+  limit: number,
+  search: string,
+  isFetured: boolean,
+) => {
+  const skip = (page - 1) * limit;
+  const where: any = {
+    AND: [
+      search && {
+        OR: [
+          {
+            title: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            content: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+      typeof isFetured === "boolean" ? { isFetured } : undefined,
+    ].filter(Boolean),
+  };
+  return prisma.post.findMany({
+    skip,
+    take: limit,
+    where,
+  });
 };
 const getPostById = async (id: number) => {
   const result = prisma.post.findUnique({ where: { id } });
@@ -18,10 +50,19 @@ const updatePost = async (
   id: number,
   payload: Prisma.PostUpdateInput,
 ): Promise<Post> => {
+  const exitsPost = await getPostById(id);
+  if (!exitsPost) {
+    throw new Error("Post not found");
+  }
   return prisma.post.update({ where: { id }, data: payload });
 };
-const deletePost = async (id: number): Promise<Post> => {
-  return prisma.post.delete({ where: { id } });
+const deletePost = async (id: number) => {
+  const exitsPost = await getPostById(id);
+  if (!exitsPost) {
+    throw new Error("Post not found");
+  }
+  const result = await prisma.post.delete({ where: { id } });
+  return { id: result.id };
 };
 export const postService = {
   createPost,

@@ -14,7 +14,57 @@ const createPost = catchAsync(
     });
   },
 );
+const getPosts = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await postService.getPosts();
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      data: result,
+      message: "Posts retrieved successfully",
+    });
+  },
+);
+const getPostById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = Number(req.params.id);
+    const result = await postService.getPostById(id);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      data: result,
+      message: "Post retrieved successfully",
+    });
+  },
+);
+const updatePost = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = Number(req.params.id);
+    const result = await postService.updatePost(id, req.body);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      data: result,
+      message: "Post updated successfully",
+    });
+  },
+);
+const deletePost = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await postService.deletePost(Number(req.params.id));
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      data: result,
+      message: "Post deleted successfully",
+    });
+  },
+);
 
 export const postController = {
   createPost,
+  getPosts,
+  getPostById,
+  updatePost,
+  deletePost,
 };
